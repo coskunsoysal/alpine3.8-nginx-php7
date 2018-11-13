@@ -10,11 +10,17 @@ RUN apk --no-cache add php7 php7-fpm php7-mysqli php7-json php7-openssl php7-cur
 # Install nginx 
 RUN apk --no-cache add nginx
 
+# Install supervisor
+RUN apk --no-cache add supervisor
+
 # Configure nginx
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 # Configure PHP-FPM
 COPY conf/fpm-pool.conf /etc/php7/php-fpm.d/zzz_custom.conf
+
+# Configure supervisord
+COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Add application
 RUN mkdir -p /var/www/html
@@ -22,3 +28,6 @@ WORKDIR /var/www/html
 RUN echo "<?php info();" >> /var/www/html/index.php
 
 EXPOSE 80 443
+
+# run nginx and php with supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
