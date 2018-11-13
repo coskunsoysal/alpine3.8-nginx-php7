@@ -25,7 +25,7 @@ COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Add application
 RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
-RUN echo "<?php info();" >> /var/www/html/index.php
+RUN echo "<?php phpinfo();" >> /var/www/html/index.php
 
 EXPOSE 80 443
 
